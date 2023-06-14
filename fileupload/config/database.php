@@ -1,4 +1,3 @@
-// config/database.php
 <?php
 $hostname = "localhost";
 $username = "root";
@@ -11,4 +10,3 @@ try {
 } catch (PDOException $e) {
   echo "Database connection failed: " . $e->getMessage();
 }
-?>

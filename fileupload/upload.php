@@ -1,4 +1,3 @@
-// upload.php
 <?php
 // Database connection
 include("config/database.php");
