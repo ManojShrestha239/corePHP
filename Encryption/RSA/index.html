@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>RSA Encryption Tool</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 60px;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      label {
+        font-weight: bold;
+      }
+      button {
+        margin: 5px 0;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>RSA Encryption Tool</h1>
+
+    <div class="section">
+      <h2>1. Generate RSA Key Pair</h2>
+      <button onclick="generateKeys()">Generate Keys</button>
+      <div>
+        <label>Public Key:</label>
+        <textarea id="publicKey" readonly></textarea>
+      </div>
+      <div>
+        <label>Private Key:</label>
+        <textarea id="privateKey" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>2. Encrypt Message</h2>
+      <label>Message to Encrypt:</label>
+      <textarea id="plainText"></textarea>
+      <button onclick="encryptMessage()">Encrypt</button>
+      <div>
+        <label>Encrypted (Base64):</label>
+        <textarea id="encryptedText" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>3. Decrypt Message</h2>
+      <label>Encrypted (Base64):</label>
+      <textarea id="toDecrypt"></textarea>
+      <button onclick="decryptMessage()">Decrypt</button>
+      <div>
+        <label>Decrypted Message:</label>
+        <textarea id="decryptedText" readonly></textarea>
+      </div>
+    </div>
+
+    <script>
+      function generateKeys() {
+        fetch("generate_keys.php")
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("publicKey").value = data.publicKey || "";
+            document.getElementById("privateKey").value = data.privateKey || "";
+          })
+          .catch((err) => {
+            alert("Failed to generate keys: " + err);
+            console.error(err);
+          });
+      }
+
+      function encryptMessage() {
+        const publicKey = document.getElementById("publicKey").value;
+        const message = document.getElementById("plainText").value;
+        if (!publicKey || !message) {
+          alert("Public key and message are required.");
+          return;
+        }
+        fetch(
+          `encrypt.php?publicKey=${encodeURIComponent(
+            publicKey
+          )}&message=${encodeURIComponent(message)}`
+        )
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("encryptedText").value = data;
+          })
+          .catch((err) => {
+            alert("Encryption failed: " + err);
+          });
+      }
+
+      function decryptMessage() {
+        const privateKey = document.getElementById("privateKey").value;
+        const encrypted = document.getElementById("toDecrypt").value;
+        if (!privateKey || !encrypted) {
+          alert("Private key and encrypted message are required.");
+          return;
+        }
+        fetch(
+          `decrypt.php?privateKey=${encodeURIComponent(
+            privateKey
+          )}&encrypted=${encodeURIComponent(encrypted)}`
+        )
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("decryptedText").value = data;
+          })
+          .catch((err) => {
+            alert("Decryption failed: " + err);
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encryption Function</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+      }
+      section {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      textarea,
+      input[type="text"] {
+        width: 100%;
+      }
+      button {
+        margin-top: 10px;
+      }
+      .result {
+        margin-top: 10px;
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Encryption & Decryption Functions</h1>
+
+    <!-- AES Section -->
+    <section>
+      <h2>AES (Advanced Encryption Standard)</h2>
+      <label for="aes-input">Text:</label>
+      <textarea id="aes-input"></textarea>
+      <button onclick="aesEncrypt()">Encrypt</button>
+      <button onclick="aesDecrypt()">Decrypt</button>
+      <div id="aes-result" class="result"></div>
+    </section>
+
+    <!-- RSA Section -->
+    <section>
+      <h2>RSA (Rivest-Shamir-Adleman)</h2>
+      <label for="rsa-input">Text:</label>
+      <textarea id="rsa-input"></textarea>
+      <button onclick="rsaEncrypt()">Encrypt</button>
+      <button onclick="rsaDecrypt()">Decrypt</button>
+      <div id="rsa-result" class="result"></div>
+    </section>
+
+    <!-- ECC Section -->
+    <section>
+      <h2>Elliptic Curve Cryptography (ECC)</h2>
+      <label for="ecc-input">Text:</label>
+      <textarea id="ecc-input"></textarea>
+      <button onclick="eccEncrypt()">Encrypt</button>
+      <button onclick="eccDecrypt()">Decrypt</button>
+      <div id="ecc-result" class="result"></div>
+    </section>
+
+    <!-- Diffie-Hellman Section -->
+    <section>
+      <h2>Diffie-Hellman Key Exchange</h2>
+      <label for="dh-input">Other Party's Public Key:</label>
+      <textarea id="dh-input"></textarea>
+      <button onclick="dhCompute()">Compute Shared Secret</button>
+      <div id="dh-result" class="result"></div>
+    </section>
+
+    <script>
+      // AES
+      function aesEncrypt() {
+        const data = document.getElementById("aes-input").value;
+        fetch("../functions/aes.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=encrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("aes-result").innerText = res)
+          );
+      }
+      function aesDecrypt() {
+        const data = document.getElementById("aes-input").value;
+        fetch("functions/aes.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=decrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("aes-result").innerText = res)
+          );
+      }
+
+      // RSA
+      function rsaEncrypt() {
+        const data = document.getElementById("rsa-input").value;
+        fetch("functions/rsa.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=encrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("rsa-result").innerText = res)
+          );
+      }
+      function rsaDecrypt() {
+        const data = document.getElementById("rsa-input").value;
+        fetch("functions/rsa.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=decrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("rsa-result").innerText = res)
+          );
+      }
+
+      // ECC
+      function eccEncrypt() {
+        const data = document.getElementById("ecc-input").value;
+        fetch("functions/ecc.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=encrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("ecc-result").innerText = res)
+          );
+      }
+      function eccDecrypt() {
+        const data = document.getElementById("ecc-input").value;
+        fetch("functions/ecc.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "action=decrypt&data=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("ecc-result").innerText = res)
+          );
+      }
+
+      // Diffie-Hellman
+      function dhCompute() {
+        const data = document.getElementById("dh-input").value;
+        fetch("functions/dh.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "public_key=" + encodeURIComponent(data),
+        })
+          .then((res) => res.text())
+          .then(
+            (res) => (document.getElementById("dh-result").innerText = res)
+          );
+      }
+    </script>
+  </body>
+</html>
